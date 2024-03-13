@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { onMounted, onUpdated, reactive, ref } from 'vue'
 const text = ref('')
 
 const textArray: any[] = reactive([])
@@ -57,5 +57,25 @@ function delItem(item: object) {
 
 function allDel() {
   textArray.splice(0)
+}
+
+// 存入localstorage
+onUpdated(() => {
+  setStorage()
+})
+function setStorage() {
+  window.localStorage.setItem('data', JSON.stringify(textArray))
+}
+
+// 讀取localstorage
+onMounted(() => {
+  getStorage()
+})
+function getStorage() {
+  let data: any = window.localStorage.getItem('data')
+
+  JSON.parse(data).forEach((item: any) => {
+    textArray.push(item)
+  })
 }
 </script>
